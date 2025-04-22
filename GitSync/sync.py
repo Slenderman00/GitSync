@@ -21,7 +21,7 @@ def forgejo_create_repo(repo_name):
         "name": repo_name,
         "description": "",
         "private": False,
-        "auto_init": True,
+        "auto_init": False,
         "default_branch": "main",
         "trust_model": "default"
     }
