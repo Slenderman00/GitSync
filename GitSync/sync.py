@@ -62,4 +62,4 @@ def sync_repos(repos):
         if target_git_server:
             os.system(f"cd {repo_path} && git remote | grep -q target || git remote add target {target_git_server}")
             os.system(f"cd {repo_path} && git remote set-url target {target_git_server}")
-            os.system(f"cd {repo_path} && git push target --all")
+            os.system(f"cd {repo_path} && git push target --all --force")
