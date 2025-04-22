@@ -45,9 +45,10 @@ def sync_repos(repos):
         os.makedirs(path)
     os.chdir(path)
 
+
     for repo in repos:
         repo_name = repo.split("/")[-1].replace(".git", "")
-        repo_path = f"{path}/{repo_name}"
+        repo_path = f"{repo_name}"
         if not os.path.exists(repo_path):
             os.system(f"git clone {repo} {repo_path}")
 
@@ -62,4 +63,5 @@ def sync_repos(repos):
         if target_git_server:
             os.system(f"cd {repo_path} && git remote | grep -q target || git remote add target {target_git_server}")
             os.system(f"cd {repo_path} && git remote set-url target {target_git_server}")
-            os.system(f"cd {repo_path} && git push target --all --force")
+            os.system(f"cd {repo_path} && git fetch origin")
+            os.system(f"cd {repo_path} && git push target 'refs/remotes/origin/*:refs/heads/*' --force")
