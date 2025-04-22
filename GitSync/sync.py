@@ -38,33 +38,6 @@ def forgejo_create_repo(repo_name, default_branch="main"):
         print(f"Response: {response.text}")
 
 
-def forgejo_set_default_branch(repo_name, default_branch="main"):
-    settings = load_settings()
-    forgejo_api_url = settings["general"]["forgejo-api-url"]
-    forgejo_token = settings["general"]["forgejo-token"]
-
-    url = f"{forgejo_api_url}/api/v1/repos/{repo_name}/branches/{default_branch}"
-
-    headers = {
-        "Authorization": f"Bearer {forgejo_token}",
-        "Accept": "application/json",
-        "Content-Type": "application/json"
-    }
-
-    data = {
-        "default_branch": default_branch
-    }
-
-    response = requests.put(url, headers=headers, json=data)
-
-    if response.status_code == 200:
-        print(f"Default branch for '{repo_name}' set to '{default_branch}' on Forgejo.")
-    else:
-        print(f"Failed to set default branch for '{repo_name}'.")
-        print(f"Status code: {response.status_code}")
-        print(f"Response: {response.text}")
-
-
 def sync_repos(repos):
     path = load_settings()["general"]["local-repo-path"]
 
@@ -92,7 +65,3 @@ def sync_repos(repos):
             os.system(f"cd {repo_path} && git remote set-url target {target_git_server}")
             os.system(f"cd {repo_path} && git fetch origin")
             os.system(f"cd {repo_path} && git push target 'refs/remotes/origin/*:refs/heads/*' --force")
-
-        # set the default branch on Forgejo
-        if load_settings()["general"]["forgejo-api-url"]:
-            forgejo_set_default_branch(repo_name, default_branch)
