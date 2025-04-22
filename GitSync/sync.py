@@ -44,11 +44,11 @@ def sync_repos(repos):
     if not os.path.exists(path):
         os.makedirs(path)
     os.chdir(path)
-
+    
 
     for repo in repos:
         repo_name = repo.split("/")[-1].replace(".git", "")
-        repo_path = f"{repo_name}"
+        repo_path = f"{path}/{repo_name}"
         if not os.path.exists(repo_path):
             os.system(f"git clone {repo} {repo_path}")
 
