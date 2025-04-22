@@ -15,4 +15,4 @@ def get_public_repos(username):
             break
         repos.extend(data)
         page += 1
-    return [repo['clone_url'] for repo in repos]
+    return [(repo['clone_url'], repo['default_branch']) for repo in repos]

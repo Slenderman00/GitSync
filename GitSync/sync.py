@@ -3,7 +3,7 @@ import requests
 from .settings import load_settings
 
 
-def forgejo_create_repo(repo_name):
+def forgejo_create_repo(repo_name, default_branch="main"):
 
     settings = load_settings()
     forgejo_api_url = settings["general"]["forgejo-api-url"]
@@ -22,7 +22,7 @@ def forgejo_create_repo(repo_name):
         "description": "",
         "private": False,
         "auto_init": False,
-        "default_branch": "main",
+        "default_branch": default_branch,
         "trust_model": "default"
     }
 
@@ -44,16 +44,16 @@ def sync_repos(repos):
     if not os.path.exists(path):
         os.makedirs(path)
     os.chdir(path)
-    
 
-    for repo in repos:
+    for repo_info in repos:
+        repo, default_branch = repo_info
         repo_name = repo.split("/")[-1].replace(".git", "")
         repo_path = f"{path}/{repo_name}"
         if not os.path.exists(repo_path):
             os.system(f"git clone {repo} {repo_path}")
 
             if load_settings()["general"]["forgejo-api-url"]:
-                forgejo_create_repo(repo_name)
+                forgejo_create_repo(repo_name, default_branch)
 
         else:
             os.system(f"cd {repo_path} && git pull")
