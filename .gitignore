@@ -1,1 +1,3 @@
 .venv/
+GitSync.egg-info/
+build/
